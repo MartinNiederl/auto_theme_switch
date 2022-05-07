@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "auto_theme_switch"
+version = "0.1.0"
+description = "Time of day based automatic theme and wallpaper change."
+authors = ["Martin Niederl <martin.niederl99@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+suntime = "^1.2.5"
+pyvda = "^0.2.4"
+pystray = "^0.19.3"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
