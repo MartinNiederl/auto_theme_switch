@@ -1,4 +1,5 @@
 import ctypes
+import os
 import subprocess
 
 
@@ -25,3 +26,12 @@ def set_wallpaper(path: str):
 def set_registry_value(key: str, value: str, data: str):
     command = ['reg.exe', 'add', key, '/v', value, '/t', 'REG_DWORD', '/d', data, '/f']
     subprocess.run(command, stdout=subprocess.DEVNULL)
+
+
+def get_current_directory():
+    return os.path.dirname(os.path.realpath(__file__))
+
+
+def open_directory(path: str):
+    if os.path.isdir(path):
+        os.startfile(path)
