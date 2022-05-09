@@ -77,3 +77,7 @@ class Config(metaclass=utils.Singleton):
     @property
     def wallpapers(self) -> tuple[str, str]:
         return self.light_wallpaper, self.dark_wallpaper
+
+    @property
+    def log(self) -> tuple[bool, str]:
+        return self.config['log'].get('enabled'), self.config['log'].get('path')

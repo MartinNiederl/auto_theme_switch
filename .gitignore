@@ -47,3 +47,4 @@ MANIFEST
 
 *.log
 config.yml
+config.json

@@ -11,7 +11,7 @@ from auto_theme_switch.auto_switch_loop import AutoSwitchLoop
 from auto_theme_switch.theme import Theme
 
 state_theme: Theme = Theme.AUTO
-asl = AutoSwitchLoop()
+asl = AutoSwitchLoop(config)
 
 
 def _on_close(icon: pystray.Icon):
