@@ -36,16 +36,16 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
         return self.config.time_to_switch
 
     def _get_theme(self, now: datetime):
-        if self.theme == Theme.AUTO:
-            start, end = self._get_times()
+        if self.theme != Theme.AUTO:
+            return self.theme
 
-            if now.date() != self.previous_date:
-                self.previous_date = now.date()
-                logging.info(f"{self.previous_date} - start: {start.strftime('%H:%M')}, end: {end.strftime('%H:%M')}")
+        start, end = self._get_times()
 
-            return Theme.get_matching_theme(start, end, now)
+        if now.date() != self.previous_date:
+            self.previous_date = now.date()
+            logging.info(f"{self.previous_date} - start: {start.strftime('%H:%M')}, end: {end.strftime('%H:%M')}")
 
-        return self.theme
+        return Theme.get_matching_theme(start, end, now)
 
     def _loop(self):
         desktop_no = -1
@@ -61,7 +61,7 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
             # The next lines are required to not miss changing the theme after leaving pc sleep.
             now = datetime.now(tz=dateutil.tz.tzlocal())
             if now - previous_loop_time > timedelta(seconds=30):
-                logging.info('Last change was more than 30 seconds ago, resetting theme')
+                logging.info('Last loop was more than 30 seconds ago, could be after sleep')
                 self.pending_theme_change = True
 
             if dn != desktop_no or self.pending_theme_change:
