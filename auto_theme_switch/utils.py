@@ -1,4 +1,6 @@
+import collections.abc
 import ctypes
+import datetime
 import os
 import subprocess
 
@@ -35,3 +37,16 @@ def get_current_directory():
 def open_directory(path: str):
     if os.path.isdir(path):
         os.startfile(path)
+
+
+def parse_time_str(time_str: str) -> datetime.time:
+    return datetime.datetime.strptime(time_str, '%H:%M').time()
+
+
+def merge_dict(d: dict, u) -> dict:
+    for k, v in u.items():
+        if isinstance(v, collections.abc.Mapping):
+            d[k] = merge_dict(d.get(k, {}), v)
+        else:
+            d[k] = v
+    return d
