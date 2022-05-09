@@ -1,7 +1,7 @@
 import logging
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import dateutil.tz
 from pyvda import VirtualDesktop
@@ -35,11 +35,9 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
 
         return self.config.time_to_switch
 
-    def _get_theme(self):
+    def _get_theme(self, now: datetime):
         if self.theme == Theme.AUTO:
             start, end = self._get_times()
-
-            now = datetime.now(tz=dateutil.tz.tzlocal())
 
             if now.date() != self.previous_date:
                 self.previous_date = now.date()
@@ -51,6 +49,7 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
 
     def _loop(self):
         desktop_no = -1
+        previous_loop_time = datetime.now(tz=dateutil.tz.tzlocal())
         while not self.is_stopped:
             try:
                 dn = VirtualDesktop.current().number
@@ -59,13 +58,20 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
                 time.sleep(5)
                 continue
 
+            # The next lines are required to not miss changing the theme after leaving pc sleep.
+            now = datetime.now(tz=dateutil.tz.tzlocal())
+            if now - previous_loop_time > timedelta(seconds=30):
+                logging.info('Last change was more than 30 seconds ago, resetting theme')
+                self.pending_theme_change = True
+
             if dn != desktop_no or self.pending_theme_change:
                 desktop_no = dn
                 self.pending_theme_change = False
 
-                self._get_theme().apply()
+                self._get_theme(now).apply()
 
             time.sleep(5)
+            previous_loop_time = now
 
     def start_loop(self):
         logging.info("Starting loop...")
