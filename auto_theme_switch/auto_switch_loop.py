@@ -55,7 +55,8 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
             try:
                 dn = VirtualDesktop.current().number
             except:
-                logging.error("Could not get current desktop number")
+                logging.warning("Could not get current desktop number")
+                time.sleep(5)
                 continue
 
             if dn != desktop_no or self.pending_theme_change:
