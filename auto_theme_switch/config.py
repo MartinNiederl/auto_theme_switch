@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import logging
 import os
 from datetime import time
 
@@ -20,7 +19,7 @@ class Config(metaclass=utils.Singleton):
         },
         "log": {
             "enabled": True,
-            "path": utils.get_current_directory() + '/auto_theme_switch.log'
+            "path": os.path.join(utils.get_current_directory(), 'auto_theme_switch.log')
         }
     }
 
@@ -31,7 +30,7 @@ class Config(metaclass=utils.Singleton):
     @staticmethod
     def _read_config(path: str) -> dict:
         if path is None or not os.path.exists(path):
-            logging.warning(f'Config file not found: {path}')
+            print(f'Config file not found: {path}')
             return {}
 
         with open(path, 'r') as f:
@@ -81,3 +80,6 @@ class Config(metaclass=utils.Singleton):
     @property
     def log(self) -> tuple[bool, str]:
         return self.config['log'].get('enabled'), self.config['log'].get('path')
+
+
+config = Config(utils.get_config_path())

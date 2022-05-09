@@ -8,6 +8,7 @@ from pystray import Menu, MenuItem
 
 from auto_theme_switch import utils
 from auto_theme_switch.auto_switch_loop import AutoSwitchLoop
+from auto_theme_switch.config import config
 from auto_theme_switch.theme import Theme
 
 state_theme: Theme = Theme.AUTO

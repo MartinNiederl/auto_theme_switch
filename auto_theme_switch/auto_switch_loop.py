@@ -18,7 +18,7 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
         self.config = config
         self.is_stopped = False
 
-        latitude, longitude = self.config.location
+        latitude, longitude = config.location
         if latitude is not None and longitude is not None:
             logging.info(f'Using latitude: {latitude}, longitude: {longitude}')
             self.sun = Sun(latitude, longitude)

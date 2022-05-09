@@ -34,6 +34,10 @@ def get_current_directory():
     return os.path.dirname(os.path.realpath(__file__))
 
 
+def get_config_path():
+    return os.path.join(get_current_directory(), 'config.json')
+
+
 def open_directory(path: str):
     if os.path.isdir(path):
         os.startfile(path)

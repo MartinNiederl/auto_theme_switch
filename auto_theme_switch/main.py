@@ -2,16 +2,14 @@ import logging
 
 from auto_theme_switch import tray
 from auto_theme_switch.auto_switch_loop import AutoSwitchLoop
-from auto_theme_switch.config import Config
+from auto_theme_switch.config import config
 
 
 def main():
-    config = Config('config.json')
-
     log_enabled, log_path = config.log
 
     if log_enabled:
-        logging.basicConfig(filename=log_path,
+        logging.basicConfig(filename=log_path, force=True,
                             filemode='a',
                             format='%(asctime)s [%(levelname)-8s] %(module)s:%(lineno)s - %(message)s',
                             level=logging.INFO)

@@ -5,9 +5,7 @@ from datetime import datetime, time
 from enum import Enum
 
 from auto_theme_switch import utils
-from auto_theme_switch.config import Config
-
-config = Config('config.json')
+from auto_theme_switch.config import config
 
 REG_KEY = r'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize'
 
