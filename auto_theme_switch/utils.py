@@ -27,7 +27,7 @@ def set_wallpaper(path: str):
 
 def set_registry_value(key: str, value: str, data: str):
     command = ['reg.exe', 'add', key, '/v', value, '/t', 'REG_DWORD', '/d', data, '/f']
-    subprocess.run(command, stdout=subprocess.DEVNULL)
+    subprocess.run(command, stdout=subprocess.DEVNULL, creationflags=subprocess.CREATE_NO_WINDOW)
 
 
 def get_current_directory():
