@@ -25,9 +25,10 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
         else:
             logging.info('No latitude and longitude set, using config day and night times')
 
-        self.theme = Theme.AUTO
+        self.fixed_theme = Theme.AUTO  # Theme option which is set via config or from tray menu.
         self.pending_theme_change = False
-        self.previous_date = datetime(1970, 1, 1)
+        self.previous_date = datetime(1970, 1, 1)  # Only used for logging to print time of sunrise and sunset once per day.
+        self.current_theme = None  # Theme which is currently applied. (Only DARK or LIGHT)
 
     def _get_times(self):
         if self.sun:
@@ -36,8 +37,14 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
         return self.config.time_to_switch
 
     def _get_theme(self, now: datetime):
-        if self.theme != Theme.AUTO:
-            return self.theme
+        """
+        Returns the theme which should be applied. If the current time is between the day and night times,
+        the theme is DARK, otherwise LIGHT. Never returns AUTO.
+        :param now: Current time.
+        :return: Theme.DARK or Theme.LIGHT.
+        """
+        if self.fixed_theme != Theme.AUTO:
+            return self.fixed_theme
 
         start, end = self._get_times()
 
@@ -64,11 +71,14 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
                 logging.info('Last loop was more than 30 seconds ago, could be after sleep')
                 self.pending_theme_change = True
 
-            if dn != desktop_no or self.pending_theme_change:
+            theme = self._get_theme(now)
+            if dn != desktop_no or theme != self.current_theme or self.pending_theme_change:
                 desktop_no = dn
                 self.pending_theme_change = False
+                self.previous_change = now
+                self.current_theme = theme
 
-                self._get_theme(now).apply()
+                self.current_theme.apply()
 
             time.sleep(5)
             previous_loop_time = now
@@ -87,5 +97,5 @@ class AutoSwitchLoop(metaclass=utils.Singleton):
         self.is_stopped = True
 
     def set_theme(self, theme: Theme):
-        self.theme = theme
+        self.fixed_theme = theme
         self.pending_theme_change = True
