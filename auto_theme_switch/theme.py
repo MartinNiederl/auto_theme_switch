@@ -7,7 +7,7 @@ from enum import Enum
 from auto_theme_switch import utils
 from auto_theme_switch.config import config
 
-REG_KEY = r'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize'
+REG_KEY = r'SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize'
 
 
 class Theme(Enum):
@@ -28,7 +28,7 @@ class Theme(Enum):
 
         logging.info(f'Applying theme {self.name}')
 
-        utils.set_registry_value(REG_KEY, 'AppsUseLightTheme', str(self.value[0]))
-        utils.set_registry_value(REG_KEY, 'SystemUsesLightTheme', str(self.value[0]))
+        utils.set_registry_value(REG_KEY, 'AppsUseLightTheme', self.value[0])
+        utils.set_registry_value(REG_KEY, 'SystemUsesLightTheme', self.value[0])
         if self.value[1]:
             utils.set_wallpaper(self.value[1])
